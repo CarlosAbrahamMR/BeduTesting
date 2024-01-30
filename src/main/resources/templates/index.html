@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+
+</head>
+<body>
+
+<h2>Login</h2>
+
+<form th:action="@{/auth/login}" method="post">
+    <div>
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" required />
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+    </div>
+    <div>
+        <button id="miBoton" type="submit">Login</button>
+    </div>
+</form>
+
+<div id="resultContainer"></div>
+
+</body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function submitForm() {
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+
+        // Construir el cuerpo de la solicitud
+        var requestBody = {
+            email: email,
+            password: password
+        };
+
+        fetch('/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Manejar la respuesta, por ejemplo, mostrar el token en la consola
+            console.log('Respuesta del servidor:', data);
+
+            // También puedes realizar otras acciones con la respuesta según tus necesidades
+
+            // Por ejemplo, redirigir si el servidor devuelve una URL de redirección
+            if (data.redirectUrl) {
+                window.location.href = data.redirectUrl;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Manejar errores si es necesario
+        });
+    }
+
+    /*]]>*/
+</script>
+</html>

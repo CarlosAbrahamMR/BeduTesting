@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Obtener el rol del localStorage
+        var userRoles = localStorage.getItem('role') ? localStorage.getItem('role').split(',') : [];
+        console.log('User Roles:', userRoles);
+
+        // Obtener todos los elementos de la lista
+        var sidebarItems = document.querySelectorAll('.sidebar-item');
+
+        // Ocultar todos los elementos
+        sidebarItems.forEach(function (item) {
+            item.setAttribute('hidden', 'true');
+        });
+
+        userRoles.forEach(function(role) {
+            var elements = document.querySelectorAll('.sidebar-item');
+            elements.forEach(function(element) {
+                var dataRoles = element.getAttribute('data-roles').split(' ');
+                if (dataRoles.includes(role)) {
+                    element.removeAttribute('hidden');
+                }
+            });
+        });
+    });
+</script>
+
+<div id="sidebar" class='active' th:fragment="sidebar">
+    <div class="sidebar-wrapper active">
+        <div class="sidebar-header">
+            <img th:src="@{/images/logo.jpg}" alt="" srcset=""  >
+        </div>
+        <div class="sidebar-menu">
+            <ul class="menu">
+                <li class='sidebar-title'>Acciones</li>
+
+                <li class="sidebar-item" data-roles="ADMIN">
+                    <a href="/home/welcome" class='sidebar-link'>
+                        <i data-feather="home" width="20"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item" data-roles="EMPLOYEE">
+                    <a href="/home/empleado-nuevo" class='sidebar-link'>
+                        <i data-feather="triangle" width="20"></i>
+                        <span>Nuevo empleado</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item" data-roles="INVENTORY">
+                    <a href="/home/inventary" class='sidebar-link'>
+                        <span>Inventario</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item" data-roles="EMPLOYEE,ADMIN">
+                    <a href="/home/empleadoRol" class='sidebar-link'>
+                        <span>Empleado con Rol</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item" data-roles="ADMIN">
+                    <a href="/home/pendientes" class='sidebar-link'>
+                        <span>Pendientes</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+    </div>
+</div>
+
+</body>
+</html>

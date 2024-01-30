@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Empleado</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7faff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        form {
+            width: 400px;
+            background-color: #fff;
+            padding-left: 20px;  /* Reduje el espacio izquierdo para centrar mejor */
+            padding-right: 20px;  /* Reduje el espacio derecho para centrar mejor */
+            padding-top: 20px;
+            padding-bottom: 50px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 690px;  /* Ajusté el espacio superior */
+            margin-bottom: 100px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f7faff;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<form id="employeeForm" onsubmit="submitForm(event)">
+
+    <div id="space">
+
+        <h2>Agregar trabajador</h2><br>
+        <label for="firstName">Nombre:</label>
+        <input type="text" id="firstName" name="firstName" required pattern="[A-Za-zÁ-ÿ\s]+" title="Solo letras y espacios permitidos"><br><br>
+
+        <label for="lastNames">Apellidos:</label>
+        <input type="text" id="lastNames" name="lastNames" required pattern="[A-Za-zÁ-ÿ\s]+" title="Solo letras y espacios permitidos"><br><br>
+
+        <label for="phone">Teléfono:</label>
+        <input type="tel" id="phone" name="phone" required pattern="[0-9]+" title="Solo números permitidos"><br><br>
+
+        <label for="email">Correo Electrónico:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password" value="Qa12323232" required><br>
+
+        <label for="roles">Roles:</label>
+        <input type="text" id="roles" name="roles" value="MANAGER" required><br>
+
+
+        <label for="curp">CURP:</label>
+        <input type="text" id="curp" name="curp" required pattern="[A-Za-z0-9]+" title="Solo letras y números permitidos"><br><br>
+
+        <label for="rfc">RFC:</label>
+        <input type="text" id="rfc" name="rfc" required pattern="[A-Za-z0-9]+" title="Solo letras y números permitidos"><br><br>
+
+        <label for="nss">NSS:</label>
+        <input type="text" id="nss" name="nss" required pattern="[0-9]+" title="Solo números permitidos"><br><br>
+
+        <label for="salary">Salario:</label>
+        <input type="number" id="salary" name="salary" required min="0"><br><br>
+
+        <label for="birthdate">Fecha de Nacimiento:</label>
+        <input type="date" id="birthdate" name="birthdate" required><br><br>
+
+
+
+        <!-- Puedes agregar más campos según sea necesario -->
+
+        <button type="submit">Enviar</button>  <!-- Cambiado a type="submit" -->
+    </div>
+</form>
+
+<script>
+    function submitForm(event) {
+        event.preventDefault();  // Prevenir el comportamiento por defecto del formulario
+
+        function obtenerToken() {
+        return localStorage.getItem('jwtToken');
+    }
+        // Validar los campos antes de enviar
+        if (validateForm()) {
+            var employeeData = {
+                "firstName": $("#firstName").val(),
+                "lastName": $("#lastNames").val(),
+                "phone": $("#phone").val(),
+                "email": $("#email").val(),
+                "password": $("#password").val(),
+                "roles": $("#roles").val(),
+                "curp": $("#curp").val(),
+                "rfc": $("#rfc").val(),
+                "nss": $("#nss").val(),
+                "salary": $("#salary").val(),
+                "birthdate": $("#birthdate").val(),
+                // Agrega el resto de los campos según sea necesario
+            };
+
+            $.ajax({
+                type: 'POST',
+                headers: {
+                    "Authorization": "Bearer " + obtenerToken()
+                },
+                url: '/auth/register',  // Reemplaza con la URL de tu endpoint
+                contentType: 'application/json',
+                data: JSON.stringify(employeeData),
+                success: function (data, textStatus, jqXHR) {
+                    // Manejar la respuesta del servidor
+                    console.log('Datos enviados con éxito',data);
+                    alert(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // Manejar errores
+                    console.error('Error al enviar datos',data);
+                }
+            });
+        } else {
+            console.log('Datos no válidos. Por favor, verifica los campos.');
+        }
+    }
+
+    function validateForm() {
+        // Realizar validaciones específicas para cada campo
+        if (!validateName($("#firstName").val())) {
+            alert('El campo Nombre solo permite letras y espacios.');
+            return false;
+        }
+
+        if (!validateName($("#lastNames").val())) {
+            alert('El campo Apellidos solo permite letras y espacios.');
+            return false;
+        }
+
+        if (!validatePhone($("#phone").val())) {
+            alert('El campo Teléfono solo permite números.');
+            return false;
+        }
+
+        if (!validateEmail($("#email").val())) {
+            alert('Por favor, introduce un correo electrónico válido.');
+            return false;
+        }
+
+        // Agrega más validaciones para otros campos según sea necesario
+
+        return true; // Devuelve true si todas las validaciones son exitosas
+    }
+
+    function validateName(value) {
+        var regex = /^[A-Za-zÁ-ÿ\s]+$/;
+        return regex.test(value);
+    }
+
+    function validatePhone(value) {
+        var regex = /^[0-9]+$/;
+        return regex.test(value);
+    }
+
+    function validateEmail(value) {
+        // Puedes utilizar una expresión regular para validar direcciones de correo electrónico
+        var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(value);
+    }
+</script>
+
+</body>
+</html>

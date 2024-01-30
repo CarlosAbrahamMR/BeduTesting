@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - Voler Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+
+    <link rel="shortcut icon" th:href="@{/images/logo.jpg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>
+        /* Estilos para el modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fefefe;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Estilos para el enlace subrayado */
+        #termsLink {
+            text-decoration: underline;
+            color: blue;
+            cursor: pointer;
+        }
+        #termsLink2 {
+            text-decoration: underline;
+            color: blue;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div id="auth">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 col-sm-12 mx-auto">
+                <div class="card pt-4">
+                    <div class="card-body">
+                        <div class="text-center mb-5">
+                            <img th:src="@{/images/logo.jpg}" height="48" class='mb-4'>
+                            <h3>Ingresar</h3>
+                            <p>Ingresa para ver los detalles</p>
+                        </div>
+                        <form onsubmit="submitForm(); return false;">
+                            <div class="form-group position-relative has-icon-left">
+                                <label for="email">Username</label>
+                                <div class="position-relative">
+                                    <input type="text" class="form-control" id="email" required>
+                                    <div class="form-control-icon">
+                                        <i data-feather="user"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group position-relative has-icon-left">
+                                <div class="clearfix">
+                                    <label for="password">Password</label>
+
+
+
+                                </div>
+                                <div class="position-relative">
+                                    <input type="password" class="form-control" id="password" required>
+                                    <div class="form-control-icon">
+                                        <i data-feather="lock"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <small>Llama a soporte si olvidaste tu contraseña</small>
+
+
+
+                            <div class="clearfix">
+                                <button class="btn btn-primary float-end" type="submit">Ingresar</button>
+                            </div>
+                            <p id="error-message" style="color: red;"></p>
+                            <small id="termsLink" onclick="openModal()">**Política de Seguridad y Privacidad para el Sistema SIPE</small><br>
+                            <small id="termsLink2" onclick="openModal2()">**Restricción de Acceso y Consecuencias Legales</small>
+                            <!-- Modal de términos y condiciones -->
+                            <div id="termsModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close" onclick="closeModal()">&times;</span>
+                                    <p>Política de Seguridad y Privacidad para el Sistema SIPE</p>
+                                    <!-- Contenido de tus términos y condiciones aquí -->
+                                    <p>Bienvenido al sistema SIPE de Precisionconnect América. Antes de acceder al sistema, es importante que leas y comprendas nuestra política de seguridad y privacidad. Al acceder al sistema SIPE, aceptas los términos descritos a continuación.
+
+                                        *Privacidad de Datos:*
+                                        <br>
+                                        1. *Recopilación de Datos:* Al acceder al sistema SIPE, recopilamos cierta información personal para fines de autenticación y seguridad. Esta información puede incluir tu nombre, dirección de correo electrónico, puesto de trabajo y otra información relevante.
+                                        <br>
+                                        2. *Uso de Datos:* Los datos recopilados serán utilizados únicamente para fines de autenticación, seguridad y para proporcionar soporte técnico relacionado con el sistema SIPE. No compartiremos tus datos con terceros sin tu consentimiento explícito, a menos que estemos legalmente obligados a hacerlo.
+                                        <br>
+                                        3. *Almacenamiento de Datos:* Tus datos se almacenarán de forma segura en nuestros servidores, y tomaremos todas las medidas razonables para protegerlos contra accesos no autorizados o cualquier forma de manipulación.
+                                        <br><br>
+                                        *Seguridad del Sistema:*
+                                        <br>
+                                        1. *Acceso Seguro:* El acceso al sistema SIPE está restringido a usuarios autorizados. Te comprometes a no compartir tus credenciales de acceso con terceros y a utilizar medidas de seguridad apropiadas para proteger tu información de inicio de sesión.
+                                        <br>
+                                        2. *Registro de Actividades:* Todas las actividades realizadas en el sistema SIPE serán registradas y monitoreadas con el fin de garantizar la seguridad y la integridad de los datos.
+                                        <br>
+                                        3. *Actualizaciones de Seguridad:* Nos comprometemos a mantener el sistema SIPE actualizado con las últimas medidas de seguridad para proteger la información de nuestros usuarios.
+                                        <br><br>
+                                        *Consentimiento:*
+                                        <br>
+                                        Al acceder al sistema SIPE, aceptas los términos de esta política de seguridad y privacidad. Si no estás de acuerdo con estos términos, abstente de acceder al sistema.
+                                        <br>
+                                        Al acceder al sistema SIPE, reconoces que has leído, entendido y aceptado los términos de esta política de seguridad y privacidad.
+                                        <br>
+                                        Si tienes alguna pregunta sobre esta política, no dudes en ponerte en contacto con nuestro equipo de soporte.
+                                        contacto@precisionconnect.net...</p>
+                                </div>
+                            </div>
+                            <div id="termsModal2" class="modal">
+                                <div class="modal-content">
+                                    <span class="close" onclick="closeModal2()">&times;</span>
+                                    <p>Restricción de Acceso y Consecuencias Legales</p>
+                                    <!-- Contenido de tus términos y condiciones aquí -->
+                                    <p>Bienvenido al sistema SIPE de Precisionconnect América. Antes de acceder al sistema, es importante que leas y comprendas nuestra política de seguridad y privacidad. Al acceder al sistema SIPE, aceptas los términos descritos a continuación.
+                                        <br><br>
+                                        1. *Acceso Autorizado:* El acceso al sistema SIPE está restringido exclusivamente a personas autorizadas por Precisionconnect América. Cualquier intento de acceder al sistema de forma no autorizada constituirá una violación de nuestras políticas de seguridad.
+                                        <br><br>
+                                        2. *Violación de Seguridad:* Cualquier intento de acceder sin autorización a los sistemas de Precisionconnect América, incluido el sistema SIPE, será investigado. Se tomarán medidas legales y se cooperará plenamente con las autoridades correspondientes para procesar a los responsables de cualquier violación de seguridad.
+                                        <br><br>
+                                        3. *Consecuencias Legales:* Los intentos de acceso no autorizado y cualquier violación de la seguridad del sistema serán tratados con seriedad. Estas acciones pueden ser penalizadas de acuerdo con las leyes de los Estados Unidos de América, así como con las leyes que apliquen en el país desde el cual se realice el intento de acceso no autorizado.</p>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function submitForm() {
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        document.getElementById("error-message").innerHTML = '';
+        // Construir el cuerpo de la solicitud
+        var requestBody = {
+            email: email,
+            password: password
+        };
+
+        fetch('/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Manejar la respuesta, por ejemplo, mostrar el token en la consola
+            console.log('Respuesta del servidor:', data);
+
+            // Verificar si la respuesta contiene un token
+            if (data.jwt) {
+                // Guardar el token en el localStorage
+                localStorage.setItem('jwtToken', data.jwt);
+                localStorage.setItem('role', data.role);
+                localStorage.setItem('name', data.name);
+                localStorage.setItem('miToken', data.token);
+            // Luego, puedes usar este token para futuras solicitudes AJAX
+
+
+
+                window.location.href = '/home/welcome'; // Reemplaza '/nueva/url' con la URL a la que deseas redirigir
+
+
+            // Por ejemplo, redirigir si el servidor devuelve una URL de redirección
+            }else {
+                // Mostrar un mensaje de error si el acceso es incorrecto
+                document.getElementById("error-message").innerHTML = 'Credenciales incorrectas. Por favor, inténtalo de nuevo.';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Manejar errores si es necesario
+        });
+    }
+    function openModal() {
+            var modal = document.getElementById("termsModal");
+            modal.style.display = "block";
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            var modal = document.getElementById("termsModal");
+            modal.style.display = "none";
+        }
+        function openModal2() {
+            var modal = document.getElementById("termsModal2");
+            modal.style.display = "block";
+        }
+
+        // Función para cerrar el modal
+        function closeModal2() {
+            var modal = document.getElementById("termsModal2");
+            modal.style.display = "none";
+        }
+    /*]]>*/
+</script>
+
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Voler Admin Dashboard</title>
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+
+    <link rel="stylesheet" th:href="@{/css/Chart.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/perfect-scrollbar.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="shortcut icon" th:href="@{/images/logo.jpg}" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Obtener el rol del localStorage
+        var userRoles = localStorage.getItem('role') ? localStorage.getItem('role').split(',') : [];
+        console.log('User Roles:', userRoles);
+
+        // Obtener todos los elementos de la lista
+        var sidebarItems = document.querySelectorAll('.sidebar-item');
+
+        // Ocultar todos los elementos
+        sidebarItems.forEach(function (item) {
+            item.setAttribute('hidden', 'true');
+        });
+
+        userRoles.forEach(function(role) {
+            var elements = document.querySelectorAll('.sidebar-item');
+            elements.forEach(function(element) {
+                var dataRoles = element.getAttribute('data-roles').split(' ');
+                if (dataRoles.includes(role)) {
+                    element.removeAttribute('hidden');
+                }
+            });
+        });
+    });
+</script>
+    <script>
+    $(document).ready(function () {
+            function obtenerToken() {
+        return localStorage.getItem('jwtToken');
+    }
+
+
+
+            // Realizar solicitud AJAX con el token
+            $.ajax({
+                url: "/empleados",
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + obtenerToken()
+                },
+                success: function (data) {
+                    // Manipular los datos y construir la tabla
+                    var tableBody = $("#dataTableBody");
+                    console.log(data);
+                    data.forEach(function (userData) {
+                        var row = "<tr>" +
+                            "<td><a href='/home/detalle-empleado/" + userData.id + "'>" + userData.firstName + "</a></td>" +
+                            "<td>" + userData.lastNames + "</td>" +
+                            "<td>" + userData.curp + "</td>" +
+                            "<td>" + userData.department + "</td>" +
+                            "<td>" + formatResponsiveData(userData._responsive_signed) + "</td>" +
+                            "<td>" + formatAssistanceData(userData.assistance) + "</td>" +
+                            "<td>" + formatResponsiveData(userData._responsive_signed) + "</td>" +
+                            "</tr>";
+                        tableBody.append(row);
+                    });
+                },
+                error: function (error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        });
+
+    function formatResponsiveData(assistanceData) {
+        if (assistanceData.length === null) {
+            return "NO";
+        }else{
+            return "NO";
+        }}
+    function formatAssistanceData(assistanceData) {
+        if (assistanceData.length === 0) {
+            return "Sin faltas";
+        }
+
+
+
+
+        var result = "<ul>";
+        assistanceData.forEach(function (assistance) {
+            result += "<li>ID: " + assistance.id + ", Día: " + assistance.day +
+                      ", Entrada: " + assistance.entry + ", Salida: " + assistance.leave + "</li>";
+        });
+        result += "</ul>";
+        return result;
+    }
+</script>
+</head>
+
+<body>
+<div id="app"><!--Main content-->
+    <span th:replace="fragments/sidebar :: sidebar"></span>
+    <div id="main"><!--Content id-->
+        <span th:replace="fragments/header :: header"></span>
+        <div class="main-content container-fluid" layout:fragment="content"><!--dynamic content-->
+            <!--you can replace this using page-->
+
+            <table border="1" class="styled-table">
+                <thead>
+                <tr>
+
+                    <th>Nombre Completo</th>
+                    <th>Apellidos</th>
+                    <th>CURP</th>
+                    <th>Departamento</th>
+                    <th>Responsiva</th>
+                    <th>Faltas</th>
+                    <th>Contrato</th>
+                </tr>
+                </thead>
+                <tbody id="dataTableBody"></tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+</body>
+<style>
+    /* Estilos para la tabla */
+    .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 18px;
+    text-align: left;
+    background: white;
+    }
+
+
+    .styled-table th,
+    .styled-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    }
+
+    .styled-table thead th {
+    background-color: #d5e8e3;
+    }
+
+    .styled-table tbody tr:hover {
+    background-color: #F5F0F0;
+    }
+
+</style>
+</html>
